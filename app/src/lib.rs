@@ -1,20 +1,20 @@
 use dioxus::prelude::*;
+use dioxus_router::*;
+use base64::{Engine as _, engine::general_purpose};
 
 #[must_use]
 pub fn app(cx: Scope) -> Element {
     cx.render(rsx! {
-        style { [include_str!("../styles/bootstrap.min.css")] },
-        style { [include_str!("../styles/style.css")] },
+        style { include_str!("../styles/bootstrap.min.css") },
+        style { include_str!("../styles/style.css") },
+        
         Router {
             crate::navbar {}
-            div {
-                class: "container",
-                Route { to: "/", crate::home {} }
-                Route { to: "/image", crate::rust_img {} }
-                Route { to: "/examples", crate::examples {} }
-                Route { to: "/events", crate::events {} }
-                Route { to: "", "Err 404 Route Not Found" }
-            }
+            Route { to: "/", crate::home {} }
+            Route { to: "/image", crate::rust_img {} }
+            Route { to: "/examples", crate::examples {} }
+            Route { to: "/events", crate::events {} }
+            Route { to: "", "Err 404 Route Not Found" }
         }
     })
 }
@@ -83,7 +83,7 @@ fn examples(cx: Scope) -> Element {
 }
 
 fn rust_img(cx: Scope) -> Element {
-    let rustacean = base64::encode(include_bytes!("../img/rustacean-flat-gesture.png"));
+    let rustacean = general_purpose::STANDARD.encode(include_bytes!("../img/rustacean-flat-gesture.png"));
     cx.render(rsx! {
         img {
             src: "data:image/png;base64, {rustacean}",
@@ -130,7 +130,7 @@ fn events(cx: Scope) -> Element {
         ("text", "username", "", "Input your user"),
         ("password", "password", "", "Give us your password!"),
     ];
-    rsx!(cx,
+    cx.render(rsx!(
         h3 { "Simple local state" }
         p { "Your count: {count}" }
         button {
@@ -198,5 +198,5 @@ fn events(cx: Scope) -> Element {
                 }
             }
         }
-    )
+    ))
 }
