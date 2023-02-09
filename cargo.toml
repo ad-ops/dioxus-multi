@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+    "app",
+    "desktop",
+    "ssr",
+    "web",
+]
